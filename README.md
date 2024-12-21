@@ -1,4 +1,4 @@
-## Hi there, I'm OvatJames a web builder 👋
+## Hi there, I'm OvatJames a web developer 👋
 
 <!--
 **OvatJames/OvatJames** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
