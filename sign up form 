@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>User Verify Sign-Up Form</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    background-color: #ffffffdd;
+    border-radius: 15px;
+    padding: 30px 40px 40px 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  h2 {
+    text-align: center;
+    color: #222;
+    margin-bottom: 25px;
+    font-weight: 700;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: 500;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    color: #222;
+    user-select: none;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="tel"],
+  select {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1.8px solid #aaa;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    outline: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="date"]:focus,
+  input[type="tel"]:focus,
+  select:focus {
+    border-color: #000dff;
+  }
+
+  .profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-picture-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #000dff;
+    object-fit: cover;
+    margin-bottom: 10px;
+    background: #e5e5e5;
+  }
+
+  input[type="file"].profile-input {
+    display: none;
+  }
+
+  .upload-label {
+    cursor: pointer;
+    background-color: #000dff;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    user-select: none;
+  }
+
+  .upload-label:hover {
+    background-color: #0043cc;
+  }
+
+  .gender-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 6px;
+  }
+
+  .gender-option {
+    display: flex;
+    align-items: center;
+  }
+
+  .gender-option input {
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
+  .country-select {
+    width: 100%;
+  }
+
+  .face-verification {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+  .face-verification label {
+    margin-bottom: 6px;
+  }
+
+  .face-input-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .face-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    border: 2px dashed #000dff;
+    background: #f0f0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .face-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .face-input {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1.8px solid #aaa;
+    cursor: pointer;
+    background-color: #000dff;
+    color: white;
+    font-weight: 600;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .face-input:hover {
+    background-color: #0043cc;
+  }
+
+  .submit-button {
+    margin-top: 30px;
+    padding: 15px 0;
+    border: none;
+    background: linear-gradient(90deg, #000dff, #6b73ff);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    user-select: none;
+  }
+
+  .submit-button:hover {
+    box-shadow: 0 0 15px #6b73ffaa;
+  }
+
+  .error-message {
+    color: #e63946;
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 25px 25px 35px 25px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Verify Sign-Up</h2>
+    <form id="signupForm" novalidate autocomplete="off" spellcheck="false">
+      <div class="profile-picture-container">
+        <img src="https://via.placeholder.com/120?text=Profile" alt="Profile Preview" class="profile-picture-preview" id="profilePreview" />
+        <label for="profilePicture" class="upload-label">Upload Profile Picture</label>
+        <input type="file" accept="image/*" id="profilePicture" class="profile-input" />
+      </div>
+
+      <label for="firstName">First Name *</label>
+      <input type="text" id="firstName" name="firstName" placeholder="First name" required />
+
+      <label for="middleName">Middle Name</label>
+      <input type="text" id="middleName" name="middleName" placeholder="Middle name" />
+
+      <label for="lastName">Last Name *</label>
+      <input type="text" id="lastName" name="lastName" placeholder="Last name" required />
+
+      <label for="dob">Date of Birth *</label>
+      <input type="date" id="dob" name="dob" required max="" />
+
+      <label>Gender *</label>
+      <div class="gender-group">
+        <label class="gender-option">
+          <input type="radio" name="gender" value="male" required /> Male
+        </label>
+        <label class="gender-option">
+          <input type="radio" name="gender" value="female" /> Female
+        </label>
+        <label class="gender-option">
+          <input type="radio" name="gender" value="other" /> Other
+        </label>
+      </div>
+
+      <label for="country">Country *</label>
+      <select id="country" name="country" class="country-select" required>
+        <option value="" disabled selected>Select your country</option>
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <option value="AU">Australia</option>
+        <option value="IN">India</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="JP">Japan</option>
+        <option value="BR">Brazil</option>
+        <option value="ZA">South Africa</option>
+        <!-- Additional countries can be added here -->
+      </select>
+
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" placeholder="example@domain.com" required />
+
+      <label for="phone">Phone Number *</label>
+      <input type="tel" id="phone" name="phone" placeholder="+1234567890" required pattern="^\+?[0-9]{7,15}$" />
+
+      <label for="password">Password *</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required minlength="6" />
+
+      <label for="confirmPassword">Confirm Password *</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required minlength="6" />
+      
+      <div class="face-verification">
+        <label for="faceVerification">Face Verification *</label>
+        <div class="face-input-container">
+          <div class="face-preview" id="facePreview">
+            <span>Preview</span>
+          </div>
+          <input type="file" accept="image/*" capture="user" id="faceVerification" class="face-input" />
+        </div>
+      </div>
+
+      <button type="submit" class="submit-button">Sign Up</button>
+      <div id="formError" class="error-message" aria-live="polite" role="alert"></div>
+    </form>
+  </div>
+
+<script>
+  // Set max date for DOB as today
+  (function() {
+    const dobInput = document.getElementById('dob');
+    const today = new Date().toISOString().split('T')[0];
+    dobInput.setAttribute('max', today);
+  })();
+
+  // Profile picture preview
+  const profilePictureInput = document.getElementById('profilePicture');
+  const profilePreview = document.getElementById('profilePreview');
+
+  profilePictureInput.addEventListener('change', () => {
+    const file = profilePictureInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        profilePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      profilePreview.src = 'https://via.placeholder.com/120?text=Profile';
+    }
+  });
+
+  // Face verification preview
+  const faceVerificationInput = document.getElementById('faceVerification');
+  const facePreview = document.getElementById('facePreview');
+
+  faceVerificationInput.addEventListener('change', () => {
+    const file = faceVerificationInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        facePreview.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Face Verification Preview';
+        facePreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      facePreview.innerHTML = '<span>Preview</span>';
+    }
+  });
+
+  // Form validation and submission
+  const form = document.getElementById('signupForm');
+  const formError = document.getElementById('formError');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    formError.textContent = '';
+
+    // Simple validation checks
+    const firstName = form.firstName.value.trim();
+    const lastName = form.lastName.value.trim();
+    const dob = form.dob.value;
+    const gender = form.gender.value;
+    const country = form.country.value;
+    const email = form.email.value.trim();
+    const phone = form.phone.value.trim();
+    const password = form.password.value;
+    const confirmPassword = form.confirmPassword.value;
+    const faceFile = faceVerificationInput.files[0];
+
+    if (!firstName) {
+      formError.textContent = 'Please enter your first name.';
+      form.firstName.focus();
+      return;
+    }
+    if (!lastName) {
+      formError.textContent = 'Please enter your last name.';
+      form.lastName.focus();
+      return;
+    }
+    if (!dob) {
+      formError.textContent = 'Please select your date of birth.';
+      form.dob.focus();
+      return;
+    }
+    if (!gender) {
+      formError.textContent = 'Please select your gender.';
+      return;
+    }
+    if (!country) {
+      formError.textContent = 'Please select your country.';
+      form.country.focus();
+      return;
+    }
+    if (!email) {
+      formError.textContent = 'Please enter your email address.';
+      form.email.focus();
+      return;
+    }
+    if (!phone) {
+      formError.textContent = 'Please enter your phone number.';
+      form.phone.focus();
+      return;
+    }
+    // Phone pattern validation
+    const phonePattern = /^\+?[0-9]{7,15}$/;
+    if (!phonePattern.test(phone)) {
+      formError.textContent = 'Please enter a valid phone number (7 to 15 digits, optional leading +).';
+      form.phone.focus();
+      return;
+    }
+    if (!password) {
+      formError.textContent = 'Please enter a password.';
+      form.password.focus();
+      return;
+    }
+    if (password.length < 6) {
+      formError.textContent = 'Password must be at least 6 characters long.';
+      form.password.focus();
+      return;
+    }
+    if (password !== confirmPassword) {
+      formError.textContent = 'Passwords do not match.';
+      form.confirmPassword.focus();
+      return;
+    }
+    if (!faceFile) {
+      formError.textContent = 'Please provide face verification image.';
+      faceVerificationInput.focus();
+      return;
+    }
+
+    // If all validations pass
+    // Here, you can do further processing, such as sending data to a server
+
+    alert('Form submitted successfully! Thank you for signing up.');
+
+    form.reset();
+    profilePreview.src = 'https://via.placeholder.com/120?text=Profile';
+    facePreview.innerHTML = '<span>Preview</span>';
+  });
+</script>
+</body>
+</html>
+
