@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Business Application Portal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    color: white;
+    padding: 15px 30px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+  nav {
+    background: #1f2937;
+    width: 220px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  nav button {
+    background-color: transparent;
+    border: none;
+    color: #cbd5e1;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border-left: 4px solid transparent;
+    font-weight: 500;
+  }
+  nav button:hover,
+  nav button.active {
+    background-color: #475569;
+    color: #f1f5f9;
+    border-left: 4px solid #3b82f6;
+  }
+  main {
+    flex: 1;
+    background: white;
+    padding: 25px 30px;
+    overflow-y: auto;
+  }
+  h2 {
+    margin-top: 0;
+    color: #1e293b;
+  }
+  /* File upload styles */
+  .file-upload {
+    border: 2px dashed #94a3b8;
+    padding: 40px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+  .file-upload.dragover {
+    border-color: #3b82f6;
+    background-color: #e0e7ff;
+  }
+  .file-upload input[type="file"] {
+    display: none;
+  }
+  .file-upload p {
+    font-size: 1.1rem;
+    color: #64748b;
+  }
+  .uploaded-files {
+    margin-top: 20px;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 15px;
+  }
+  .uploaded-files ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .uploaded-files li {
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    color: #334155;
+  }
+
+  /* Chat styles */
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    max-height: 600px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f9fafb;
+  }
+  .messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    border-bottom: 1px solid #cbd5e1;
+  }
+  .message {
+    margin-bottom: 12px;
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+  .message.sent {
+    background-color: #3b82f6;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .message.received {
+    background-color: #e2e8f0;
+    color: #334155;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-input {
+    display: flex;
+    padding: 10px 15px;
+    gap: 10px;
+  }
+  .chat-input textarea {
+    flex: 1;
+    resize: none;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: 1px solid #94a3b8;
+    outline-offset: 0;
+    transition: border-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+  }
+  .chat-input textarea:focus {
+    border-color: #3b82f6;
+    outline: none;
+  }
+  .chat-input button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0 18px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .chat-input button:hover {
+    background-color: #2563eb;
+  }
+
+  /* Scan & Pictures */
+  .camera-container {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  video, canvas {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+  }
+  .capture-buttons {
+    display: flex;
+    gap: 15px;
+  }
+  button.capture-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex:1;
+  }
+  button.capture-btn:hover {
+    background-color: #2563eb;
+  }
+  .scanned-images {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .scanned-images img {
+    max-width: 150px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+  }
+
+  /* Video/Audio Call */
+  .call-container {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .local-video, .remote-video {
+    width: 100%;
+    max-height: 350px;
+    background: black;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .call-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 10px;
+  }
+  button.call-btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+  }
+  button.call-btn:hover {
+    background-color: #1d4ed8;
+  }
+  button.call-btn:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  /* Scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #3b82f6;
+    border-radius: 20px;
+    border: 2px solid #f1f5f9;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    nav {
+      width: 100px;
+      font-size: 0.9rem;
+      padding-top: 10px;
+    }
+    nav button {
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+    main {
+      padding: 20px 15px;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  Business Application Portal
+</header>
+<div class="container">
+  <nav aria-label="Main navigation">
+    <button class="nav-btn active" data-tab="upload">Submit Documents</button>
+    <button class="nav-btn" data-tab="chat">Chat</button>
+    <button class="nav-btn" data-tab="scan">Scan Documents</button>
+    <button class="nav-btn" data-tab="pictures">Send Pictures</button>
+    <button class="nav-btn" data-tab="calls">Video/Audio Call</button>
+  </nav>
+  <main>
+    <!-- Submit Documents -->
+    <section id="upload" class="tab-content" style="display: block;">
+      <h2>Submit Application Documents</h2>
+      <label class="file-upload" for="file-input" tabindex="0">
+        <p>Drag & Drop files here, or click to select documents.</p>
+        <input type="file" id="file-input" multiple aria-label="Upload application documents"/>
+      </label>
+      <div class="uploaded-files" aria-live="polite" aria-atomic="true">
+        <h3>Uploaded Files</h3>
+        <ul id="file-list"></ul>
+      </div>
+    </section>
+
+    <!-- Chat -->
+    <section id="chat" class="tab-content" style="display:none;">
+      <h2>Chat</h2>
+      <div class="chat-container" aria-live="polite">
+        <div class="messages" id="chat-messages" role="log" aria-relevant="additions"></div>
+        <form id="chat-form" class="chat-input" aria-label="Send chat message">
+          <textarea id="chat-input" rows="2" placeholder="Type your message..." aria-required="true"></textarea>
+          <button type="submit" aria-label="Send message">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Scan Documents -->
+    <section id="scan" class="tab-content" style="display:none;">
+      <h2>Scan Documents</h2>
+      <div class="camera-container">
+        <video id="scan-video" autoplay playsinline></video>
+        <div class="capture-buttons">
+          <button class="capture-btn" id="scan-capture">Capture Scan</button>
+          <button class="capture-btn" id="scan-clear">Clear Scans</button>
+        </div>
+        <div class="scanned-images" id="scanned-images"></div>
+      </div>
+    </section>
+
+    <!-- Send Pictures -->
+    <section id="pictures" class="tab-content" style="display:none;">
+      <h2>Send Pictures</h2>
+      <p>You can upload pictures or take a photo with your camera.</p>
+      <div class="camera-container">
+        <video id="picture-video" autoplay playsinline></video>
+        <div class="capture-buttons">
+          <button class="capture-btn" id="picture-capture">Take Photo</button>
+          <button class="capture-btn" id="picture-clear">Clear Photos</button>
+        </div>
+        <input type="file" id="picture-upload" accept="image/*" multiple aria-label="Upload pictures" />
+        <div class="scanned-images" id="pictures-preview"></div>
+      </div>
+    </section>
+
+    <!-- Video/Audio Call -->
+    <section id="calls" class="tab-content" style="display:none;">
+      <h2>Video/Audio Call</h2>
+      <p>This simulates video and audio call by showing your local camera and microphone input.</p>
+      <div class="call-container">
+        <video id="local-video" autoplay muted playsinline class="local-video" aria-label="Local video stream"></video>
+        <div class="call-buttons">
+          <button id="start-video" class="call-btn">Start Video</button>
+          <button id="stop-video" class="call-btn" disabled>Stop Video</button>
+          <button id="start-audio" class="call-btn">Start Audio</button>
+          <button id="stop-audio" class="call-btn" disabled>Stop Audio</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // Navigation tab switch
+  const navButtons = document.querySelectorAll('nav .nav-btn');
+  const tabs = document.querySelectorAll('.tab-content');
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tabToShow = btn.getAttribute('data-tab');
+      tabs.forEach(tab => {
+        tab.style.display = (tab.id === tabToShow) ? 'block' : 'none';
+      });
+    });
+  });
+
+  // Submit Documents Feature
+  const fileInput = document.getElementById('file-input');
+  const fileList = document.getElementById('file-list');
+  const fileUploadLabel = document.querySelector('.file-upload');
+
+  let uploadedFiles = [];
+
+  function updateFileList() {
+    fileList.innerHTML = '';
+    uploadedFiles.forEach((file, index) => {
+      const li = document.createElement('li');
+      li.textContent = file.name + ' (' + formatFileSize(file.size) + ')';
+      fileList.appendChild(li);
+    });
+  }
+  function formatFileSize(size) {
+    if (size < 1024) return size + ' B';
+    else if (size < 1048576) return (size / 1024).toFixed(1) + ' KB';
+    else return (size / 1048576).toFixed(2) + ' MB';
+  }
+  fileInput.addEventListener('change', (e) => {
+    for (const file of e.target.files) {
+      uploadedFiles.push(file);
+    }
+    updateFileList();
+  });
+  // Drag and drop effects
+  fileUploadLabel.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUploadLabel.classList.add('dragover');
+  });
+  fileUploadLabel.addEventListener('dragleave', () => {
+    fileUploadLabel.classList.remove('dragover');
+  });
+  fileUploadLabel.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUploadLabel.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+      for (const file of e.dataTransfer.files) {
+        uploadedFiles.push(file);
+      }
+      updateFileList();
+    }
+  });
+
+  // Chat Feature (local demo)
+  const chatForm = document.getElementById('chat-form');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
+
+  chatForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const message = chatInput.value.trim();
+    if (!message) return;
+    addMessage(message, 'sent');
+    chatInput.value = '';
+    // Simulate response
+    setTimeout(() => {
+      addMessage("Sorry, I'm an automated demo chat.", 'received');
+    }, 1000);
+  });
+
+  function addMessage(text, type) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', type);
+    msgDiv.textContent = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Scan Documents Feature
+  const scanVideo = document.getElementById('scan-video');
+  const scanCaptureBtn = document.getElementById('scan-capture');
+  const scanClearBtn = document.getElementById('scan-clear');
+  const scannedImagesContainer = document.getElementById('scanned-images');
+  let scanStream = null;
+  let scannedImages = [];
+
+  async function startScanCamera() {
+    try {
+      scanStream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
+      scanVideo.srcObject = scanStream;
+    } catch(e) {
+      alert("Could not start camera for scanning. Please allow camera access.");
+    }
+  }
+  function stopScanCamera() {
+    if(scanStream) {
+      scanStream.getTracks().forEach(t => t.stop());
+      scanStream = null;
+    }
+  }
+  scanCaptureBtn.addEventListener('click', () => {
+    if(!scanStream) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = scanVideo.videoWidth;
+    canvas.height = scanVideo.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(scanVideo, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL('image/png');
+    scannedImages.unshift(dataUrl);
+    updateScannedImages();
+  });
+  scanClearBtn.addEventListener('click', () => {
+    scannedImages = [];
+    updateScannedImages();
+  });
+  function updateScannedImages() {
+    scannedImagesContainer.innerHTML = '';
+    scannedImages.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Scanned Document Image';
+      scannedImagesContainer.appendChild(img);
+    });
+  }
+  startScanCamera();
+
+  // Send Pictures Feature
+  const pictureVideo = document.getElementById('picture-video');
+  const pictureCaptureBtn = document.getElementById('picture-capture');
+  const pictureClearBtn = document.getElementById('picture-clear');
+  const pictureUploadInput = document.getElementById('picture-upload');
+  const picturesPreviewContainer = document.getElementById('pictures-preview');
+
+  let pictureStream = null;
+  let pictures = [];
+
+  async function startPictureCamera() {
+    try {
+      pictureStream = await navigator.mediaDevices.getUserMedia({video: true});
+      pictureVideo.srcObject = pictureStream;
+    } catch(e) {
+      alert("Could not start your camera. Please allow camera access.");
+    }
+  }
+  function stopPictureCamera() {
+    if(pictureStream) {
+      pictureStream.getTracks().forEach(t => t.stop());
+      pictureStream = null;
+    }
+  }
+  pictureCaptureBtn.addEventListener('click', () => {
+    if(!pictureStream) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = pictureVideo.videoWidth;
+    canvas.height = pictureVideo.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(pictureVideo, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL('image/png');
+    pictures.unshift(dataUrl);
+    updatePicturesPreview();
+  });
+  pictureClearBtn.addEventListener('click', () => {
+    pictures = [];
+    updatePicturesPreview();
+  });
+  pictureUploadInput.addEventListener('change', (e) => {
+    for(const file of e.target.files) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        pictures.unshift(ev.target.result);
+        updatePicturesPreview();
+      }
+      reader.readAsDataURL(file);
+    }
+    e.target.value = '';
+  });
+  function updatePicturesPreview() {
+    picturesPreviewContainer.innerHTML = '';
+    pictures.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Picture';
+      picturesPreviewContainer.appendChild(img);
+    });
+  }
+  startPictureCamera();
+
+  // Video / Audio Call Feature (local preview)
+  const localVideo = document.getElementById('local-video');
+  const startVideoBtn = document.getElementById('start-video');
+  const stopVideoBtn = document.getElementById('stop-video');
+  const startAudioBtn = document.getElementById('start-audio');
+  const stopAudioBtn = document.getElementById('stop-audio');
+
+  let localStream = null;
+
+  async function startVideo() {
+    try {
+      if(localStream) {
+        localStream.getTracks().forEach(track => {
+          if(track.kind === 'video') track.stop();
+        });
+      } else {
+        localStream = new MediaStream();
+      }
+      const videoStream = await navigator.mediaDevices.getUserMedia({video: true});
+      videoStream.getVideoTracks().forEach(track => localStream.addTrack(track));
+      localVideo.srcObject = localStream;
+      startVideoBtn.disabled = true;
+      stopVideoBtn.disabled = false;
+      startAudioBtn.disabled = false;
+    } catch(e) {
+      alert("Could not start video. Please allow camera access.");
+    }
+  }
+  function stopVideo() {
+    if(localStream) {
+      localStream.getVideoTracks().forEach(track => track.stop());
+      localStream.getVideoTracks().forEach(track => localStream.removeTrack(track));
+      if(localStream.getAudioTracks().length === 0) {
+        localVideo.srcObject = null;
+        localStream = null;
+      }
+    }
+    startVideoBtn.disabled = false;
+    stopVideoBtn.disabled = true;
+  }
+  async function startAudio() {
+    try {
+      if(localStream === null) localStream = new MediaStream();
+      const audioStream = await navigator.mediaDevices.getUserMedia({audio: true});
+      audioStream.getAudioTracks().forEach(track => localStream.addTrack(track));
+      localVideo.srcObject = localStream;
+      startAudioBtn.disabled = true;
+      stopAudioBtn.disabled = false;
+      startVideoBtn.disabled = false;
+    } catch(e) {
+      alert("Could not start audio. Please allow microphone access.");
+    }
+  }
+  function stopAudio() {
+    if(localStream) {
+      localStream.getAudioTracks().forEach(track => track.stop());
+      localStream.getAudioTracks().forEach(track => localStream.removeTrack(track));
+      if(localStream.getVideoTracks().length === 0) {
+        localVideo.srcObject = null;
+        localStream = null;
+      }
+    }
+    startAudioBtn.disabled = false;
+    stopAudioBtn.disabled = true;
+  }
+
+  startVideoBtn.addEventListener('click', startVideo);
+  stopVideoBtn.addEventListener('click', stopVideo);
+  startAudioBtn.addEventListener('click', startAudio);
+  stopAudioBtn.addEventListener('click', stopAudio);
+
+</script>
+</body>
+</html>
+
