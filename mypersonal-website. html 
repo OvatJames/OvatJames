@@ -237,7 +237,7 @@
 <body>
 
 <header>
-  <h1>John Doe</h1>
+  <h1>James Idaga Donwhite</h1>
   <p>Frontend Developer & Designer</p>
   <nav>
     <a href="#about" class="active">About</a>
@@ -251,7 +251,7 @@
   <section id="about" aria-label="About Me">
     <h2>About Me</h2>
     <p>
-      Hello! I'm John, a passionate frontend developer who loves creating beautiful and intuitive web experiences. With a strong eye for design and enthusiasm for modern technologies, I build responsive, performant websites and web applications.
+      Hello! I'm James, a passionate frontend developer who loves creating beautiful and intuitive web experiences. With a strong eye for design and enthusiasm for modern technologies, I build responsive, performant websites and web applications.
     </p>
   </section>
 
@@ -309,7 +309,7 @@
 </main>
 
 <footer>
-  &copy; 2024 John Doe. Created with ❤️ by John.
+  &copy; 2025 James Idaga. Created with ❤️ by James.
 </footer>
 
 <script>
