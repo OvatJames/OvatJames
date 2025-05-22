@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Media Downloads - Music & Videos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #121212;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #1db954;
+    padding: 1rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+
+  main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .search-box {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .search-box input {
+    width: 90%;
+    max-width: 400px;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    outline: none;
+  }
+
+  section {
+    margin-bottom: 3rem;
+  }
+
+  section h2 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    border-bottom: 2px solid #1db954;
+    padding-bottom: 0.5rem;
+    font-size: 1.75rem;
+  }
+
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .media-item {
+    background: #282828;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease;
+  }
+
+  .media-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .media-thumbnail {
+    width: 100%;
+    height: 140px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    background: #444;
+  }
+
+  .media-info {
+    flex: 1;
+  }
+
+  .media-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .media-artist,
+  .media-duration {
+    font-size: 0.875rem;
+    color: #b3b3b3;
+    margin-bottom: 0.25rem;
+  }
+
+  .download-btn {
+    margin-top: 1rem;
+    background-color: #1db954;
+    border: none;
+    border-radius: 30px;
+    padding: 0.6rem 1rem;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    user-select: none;
+  }
+
+  .download-btn:hover {
+    background-color: #17a647;
+  }
+
+  footer {
+    background: #181818;
+    color: #888;
+    text-align: center;
+    padding: 1.2rem;
+    font-size: 0.9rem;
+    border-top: 1px solid #222;
+  }
+
+  @media (max-width: 600px) {
+    .media-thumbnail {
+      height: 110px;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Media Downloads</h1>
+</header>
+<main>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search music or videos..." aria-label="Search media" />
+  </div>
+
+  <section id="musicSection">
+    <h2>Music</h2>
+    <div class="media-grid" id="musicGrid">
+      <!-- Music items will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <section id="videoSection">
+    <h2>Videos</h2>
+    <div class="media-grid" id="videoGrid">
+      <!-- Video items will be dynamically inserted here -->
+    </div>
+  </section>
+</main>
+<footer>
+  &copy; 2024 Media Downloads. All rights reserved.
+</footer>
+
+<script>
+  const musicData = [
+    {
+      id: 1,
+      title: 'Energetic Beats',
+      artist: 'DJ Pulse',
+      duration: '3:45',
+      downloadUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3',
+      thumbnail: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?&w=400&h=250&fit=crop',
+      tags: ['energetic', 'beat', 'dance', 'electronic']
+    },
+    {
+      id: 2,
+      title: 'Calm Acoustic',
+      artist: 'Guitar Hero',
+      duration: '4:05',
+      downloadUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_1MG.mp3',
+      thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?&w=400&h=250&fit=crop',
+      tags: ['calm', 'acoustic', 'guitar', 'soft']
+    },
+    {
+      id: 3,
+      title: 'Jazz Night',
+      artist: 'Smooth Sax',
+      duration: '5:12',
+      downloadUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_2MG.mp3',
+      thumbnail: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?&w=400&h=250&fit=crop',
+      tags: ['jazz', 'saxophone', 'night', 'smooth']
+    },
+    {
+      id: 4,
+      title: 'Hip Hop Vibe',
+      artist: 'Urban Beats',
+      duration: '3:30',
+      downloadUrl: 'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3',
+      thumbnail: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?&w=400&h=250&fit=crop',
+      tags: ['hip hop', 'rap', 'urban', 'vibe']
+    }
+  ];
+
+  const videoData = [
+    {
+      id: 1,
+      title: 'Nature Wonders',
+      duration: '10:12',
+      downloadUrl: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?&w=400&h=225&fit=crop',
+      tags: ['nature', 'scenery', 'calm']
+    },
+    {
+      id: 2,
+      title: 'City Timelapse',
+      duration: '7:45',
+      downloadUrl: 'https://samplelib.com/lib/preview/mp4/sample-10s.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1468071174046-657d9d351a40?&w=400&h=225&fit=crop',
+      tags: ['city', 'timelapse', 'night']
+    },
+    {
+      id: 3,
+      title: 'Cooking Masterclass',
+      duration: '12:30',
+      downloadUrl: 'https://samplelib.com/lib/preview/mp4/sample-15s.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?&w=400&h=225&fit=crop',
+      tags: ['cooking', 'food', 'tutorial']
+    },
+    {
+      id: 4,
+      title: 'Workout Routine',
+      duration: '8:25',
+      downloadUrl: 'https://samplelib.com/lib/preview/mp4/sample-20s.mp4',
+      thumbnail: 'https://images.unsplash.com/photo-1517960413843-7a2b080b64c7?&w=400&h=225&fit=crop',
+      tags: ['workout', 'fitness', 'exercise']
+    }
+  ];
+
+  function createMediaItem(item, type) {
+    const container = document.createElement('div');
+    container.className = 'media-item';
+
+    const thumb = document.createElement('img');
+    thumb.className = 'media-thumbnail';
+    thumb.src = item.thumbnail;
+    thumb.alt = item.title + ' thumbnail';
+    container.appendChild(thumb);
+
+    const info = document.createElement('div');
+    info.className = 'media-info';
+
+    const title = document.createElement('h3');
+    title.className = 'media-title';
+    title.textContent = item.title;
+    info.appendChild(title);
+
+    if(type === 'music') {
+      const artist = document.createElement('p');
+      artist.className = 'media-artist';
+      artist.textContent = 'Artist: ' + item.artist;
+      info.appendChild(artist);
+    }
+
+    const duration = document.createElement('p');
+    duration.className = 'media-duration';
+    duration.textContent = 'Duration: ' + item.duration;
+    info.appendChild(duration);
+
+    container.appendChild(info);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.className = 'download-btn';
+    downloadLink.href = item.downloadUrl;
+    downloadLink.download = '';
+    downloadLink.textContent = 'Download';
+    downloadLink.setAttribute('aria-label', `Download ${type} - ${item.title}`);
+    container.appendChild(downloadLink);
+
+    return container;
+  }
+
+  function renderMedia() {
+    const musicGrid = document.getElementById('musicGrid');
+    const videoGrid = document.getElementById('videoGrid');
+    musicGrid.innerHTML = '';
+    videoGrid.innerHTML = '';
+
+    musicData.forEach(item => {
+      musicGrid.appendChild(createMediaItem(item, 'music'));
+    });
+
+    videoData.forEach(item => {
+      videoGrid.appendChild(createMediaItem(item, 'video'));
+    });
+  }
+
+  function filterMedia(query) {
+    const lowerQuery = query.toLowerCase();
+    const musicGrid = document.getElementById('musicGrid');
+    const videoGrid = document.getElementById('videoGrid');
+
+    musicGrid.innerHTML = '';
+    videoGrid.innerHTML = '';
+
+    const filteredMusic = musicData.filter(item =>
+      item.title.toLowerCase().includes(lowerQuery) ||
+      item.artist.toLowerCase().includes(lowerQuery) ||
+      item.tags.some(tag => tag.includes(lowerQuery))
+    );
+
+    const filteredVideos = videoData.filter(item =>
+      item.title.toLowerCase().includes(lowerQuery) ||
+      item.tags.some(tag => tag.includes(lowerQuery))
+    );
+
+    filteredMusic.forEach(item => {
+      musicGrid.appendChild(createMediaItem(item, 'music'));
+    });
+
+    filteredVideos.forEach(item => {
+      videoGrid.appendChild(createMediaItem(item, 'video'));
+    });
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    filterMedia(e.target.value);
+  });
+
+  // Initial render
+  renderMedia();
+</script>
+</body>
+</html>
+
