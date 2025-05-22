@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Universal Music Download Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px 30px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    user-select: none;
+    box-shadow: 0 2px 8px #0008;
+    color: #fff;
+  }
+  main {
+    flex-grow: 1;
+    max-width: 1000px;
+    width: 90%;
+    margin: 30px auto;
+  }
+  section.genre-section {
+    margin-bottom: 50px;
+  }
+  section.genre-section h2 {
+    border-bottom: 3px solid #f39c12;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 2rem;
+    color: #f39c12;
+  }
+  .music-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap: 20px;
+  }
+  .music-item {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .music-item:hover {
+    background: rgba(243,156,18,0.8);
+    color: #1c1c1c;
+  }
+  .music-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .music-artist {
+    font-size: 0.9rem;
+    color: #e1e1e1;
+    margin-bottom: 20px;
+  }
+  .download-btn {
+    align-self: flex-start;
+    background-color: #f39c12;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 10px;
+    color: #1c1c1c;
+    cursor: pointer;
+    box-shadow: 0 3px 8px #f39c12aa;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+  }
+  .download-btn:hover,
+  .download-btn:focus {
+    background-color: #d87e0f;
+    box-shadow: 0 5px 12px #d87e0faa;
+    outline: none;
+  }
+  footer {
+    text-align: center;
+    padding: 20px 10px;
+    background-color: rgba(0,0,0,0.6);
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  @media (max-width: 600px) {
+    section.genre-section h2 {
+      font-size: 1.6rem;
+    }
+    .music-item {
+      padding: 12px 16px;
+    }
+    .music-title {
+      font-size: 1.1rem;
+    }
+    .download-btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+</head>
+<body>
+<header>Universal Music Download Hub</header>
+<main>
+  <section class="genre-section" id="popSection">
+    <h2>Pop</h2>
+    <div class="music-list">
+      <article class="music-item">
+        <h3 class="music-title">Sunny Days</h3>
+        <p class="music-artist">Artist: Bright Future</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2021/08/04/audio_8bb0facd08.mp3?filename=sunny-day-5654.mp3" download="SunnyDays.mp3" aria-label="Download Sunny Days by Bright Future">Download</a>
+      </article>
+      <article class="music-item">
+        <h3 class="music-title">Feel the Beat</h3>
+        <p class="music-artist">Artist: The Groovers</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2022/03/25/audio_7b60e89d1e.mp3?filename=feel-the-beat-15384.mp3" download="FeelTheBeat.mp3" aria-label="Download Feel the Beat by The Groovers">Download</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="genre-section" id="rockSection">
+    <h2>Rock</h2>
+    <div class="music-list">
+      <article class="music-item">
+        <h3 class="music-title">Electric Storm</h3>
+        <p class="music-artist">Artist: ThunderBand</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2022/04/25/audio_85f716afe9.mp3?filename=rock-instrumental-electro-15484.mp3" download="ElectricStorm.mp3" aria-label="Download Electric Storm by ThunderBand">Download</a>
+      </article>
+      <article class="music-item">
+        <h3 class="music-title">Power Riff</h3>
+        <p class="music-artist">Artist: Rock Masters</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2021/07/29/audio_22d1a9dbd5.mp3?filename=rock-guitar-5650.mp3" download="PowerRiff.mp3" aria-label="Download Power Riff by Rock Masters">Download</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="genre-section" id="electronicSection">
+    <h2>Electronic</h2>
+    <div class="music-list">
+      <article class="music-item">
+        <h3 class="music-title">Neon Lights</h3>
+        <p class="music-artist">Artist: Synthwave</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2021/02/24/audio_2290538235.mp3?filename=synthwave-5905.mp3" download="NeonLights.mp3" aria-label="Download Neon Lights by Synthwave">Download</a>
+      </article>
+      <article class="music-item">
+        <h3 class="music-title">Digital Dream</h3>
+        <p class="music-artist">Artist: Electro Pulse</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2022/02/10/audio_20db50a605.mp3?filename=electronic-dance-14645.mp3" download="DigitalDream.mp3" aria-label="Download Digital Dream by Electro Pulse">Download</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="genre-section" id="jazzSection">
+    <h2>Jazz</h2>
+    <div class="music-list">
+      <article class="music-item">
+        <h3 class="music-title">Smooth Evening</h3>
+        <p class="music-artist">Artist: Blue Notes</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2021/08/04/audio_0587ecf587.mp3?filename=jazz-ambient-5652.mp3" download="SmoothEvening.mp3" aria-label="Download Smooth Evening by Blue Notes">Download</a>
+      </article>
+      <article class="music-item">
+        <h3 class="music-title">Midnight Lounge</h3>
+        <p class="music-artist">Artist: Cool Cats</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2022/03/29/audio_8bda48d9a0.mp3?filename=midnight-lounge-15473.mp3" download="MidnightLounge.mp3" aria-label="Download Midnight Lounge by Cool Cats">Download</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="genre-section" id="classicalSection">
+    <h2>Classical</h2>
+    <div class="music-list">
+      <article class="music-item">
+        <h3 class="music-title">Peaceful Morning</h3>
+        <p class="music-artist">Artist: Calm Orchestra</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2022/02/01/audio_015335f6c6.mp3?filename=calm-orchestra-14497.mp3" download="PeacefulMorning.mp3" aria-label="Download Peaceful Morning by Calm Orchestra">Download</a>
+      </article>
+      <article class="music-item">
+        <h3 class="music-title">Serene Dreams</h3>
+        <p class="music-artist">Artist: Classic Ensemble</p>
+        <a class="download-btn" href="https://cdn.pixabay.com/download/audio/2022/03/11/audio_17be81de88.mp3?filename=classical-piano-15275.mp3" download="SereneDreams.mp3" aria-label="Download Serene Dreams by Classic Ensemble">Download</a>
+      </article>
+    </div>
+  </section>
+</main>
+<footer>© 2024 Universal Music Download Hub</footer>
+<script>
+  // Basic accessibility enhancement for keyboard focus and aria-labels handled in HTML
+</script>
+</body>
+</html>
+
