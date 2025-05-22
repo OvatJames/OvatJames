@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Multifunction Hub - Music, Photo, Video, Voice, Q&A</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #0f2027;  /* fallback for old browsers */
+    background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
+    color: #eee;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header {
+    background-color: #16222a;
+    padding: 1rem 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    color: #1de9b6;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  }
+  nav {
+    display: flex;
+    justify-content: center;
+    background: #1b2a38;
+  }
+  nav button {
+    flex: 1;
+    padding: 1rem 0;
+    background: transparent;
+    border: none;
+    color: #b0bec5;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  nav button.active,
+  nav button:hover {
+    background: #1de9b6;
+    color: #0f2027;
+    font-weight: 700;
+  }
+  main {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto 2rem auto;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    box-shadow: 0 0 20px #1de9b6aa;
+  }
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+  h2 {
+    margin-top: 0;
+    color: #1de9b6;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  button.primary {
+    background-color: #1de9b6;
+    color: #0f2027;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+  }
+  button.primary:hover {
+    background-color: #14b892;
+  }
+  input[type="file"], input[type="range"], textarea {
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+  }
+  .label-group {
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+    color: #a0d9ca;
+  }
+  canvas {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    background: #222;
+    box-shadow: inset 0 0 10px #0f2027;
+  }
+  video {
+    max-width: 100%;
+    margin-top: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #0f2027;
+  }
+  .controls {
+    margin-top: 1rem;
+  }
+  label.range-label {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #a0d9ca;
+  }
+  .output-text {
+    background: #16222a;
+    padding: 1rem;
+    border-radius: 6px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+    color: #1de9b6;
+  }
+  footer {
+    text-align: center;
+    color: #557a7c;
+    font-size: 0.85rem;
+    margin-top: auto;
+    padding: 1rem;
+  }
+  .loader {
+    border: 4px solid #0f2027;
+    border-top: 4px solid #1de9b6;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1.2s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+</style>
+</head>
+<body>
+<header>AI Multifunction Hub</header>
+<nav aria-label="Feature navigation">
+  <button class="tab-button active" data-tab="music">Music Beat Generator</button>
+  <button class="tab-button" data-tab="photo">Photo Editor</button>
+  <button class="tab-button" data-tab="video">Video Editor</button>
+  <button class="tab-button" data-tab="tts">Text to Voice</button>
+  <button class="tab-button" data-tab="qa">AI Q&A</button>
+</nav>
+<main>
+  <!-- Music Beat Generator Section -->
+  <section id="music" class="active" aria-labelledby="music-label" role="region">
+    <h2 id="music-label">Music Beat Generator</h2>
+    <p>Generate and play a simple rhythmic beat using Web Audio API.</p>
+    <div>
+      <label for="tempo" class="label-group">Tempo (BPM): <span id="tempoValue">100</span></label>
+      <input type="range" id="tempo" min="60" max="180" value="100" />
+    </div>
+    <button id="playBeat" class="primary">Play Beat</button>
+    <button id="stopBeat" class="primary" style="background:#e94e77;">Stop Beat</button>
+  </section>
+
+  <!-- Photo Editor Section -->
+  <section id="photo" aria-labelledby="photo-label" role="region">
+    <h2 id="photo-label">Photo Editor</h2>
+    <p>Upload an image and apply filters/effects.</p>
+    <input type="file" id="photoUpload" accept="image/*" />
+    <canvas id="photoCanvas" width="600" height="400"></canvas>
+    <div class="controls" style="display:none" id="photoControls">
+      <label class="range-label" for="brightness">Brightness</label>
+      <input type="range" id="brightness" min="-100" max="100" value="0" />
+      <label class="range-label" for="contrast">Contrast</label>
+      <input type="range" id="contrast" min="-100" max="100" value="0" />
+      <label class="range-label" for="grayscale">Grayscale</label>
+      <input type="range" id="grayscale" min="0" max="100" value="0" />
+      <button id="resetPhoto" class="primary">Reset</button>
+    </div>
+  </section>
+
+  <!-- Video Editor Section -->
+  <section id="video" aria-labelledby="video-label" role="region">
+    <h2 id="video-label">Video Editor</h2>
+    <p>Upload a video and trim it by selecting start and end times.</p>
+    <input type="file" id="videoUpload" accept="video/*" />
+    <video id="videoPlayer" controls></video>
+    <div class="controls" style="display:none" id="videoControls">
+      <label class="range-label" for="startTime">Start Time (seconds): <span id="startTimeLabel">0</span></label>
+      <input type="range" id="startTime" min="0" max="0" step="0.1" value="0" />
+      <label class="range-label" for="endTime">End Time (seconds): <span id="endTimeLabel">0</span></label>
+      <input type="range" id="endTime" min="0" max="0" step="0.1" value="0" />
+      <button id="trimVideo" class="primary">Trim Video (Download Clip)</button>
+      <p style="color:#bbb; font-size:0.9rem; margin-top:0.3rem;">* The trimming downloads only the full video currently due to browser limitations.<br/>Advanced trimming requires backend processing.</p>
+    </div>
+  </section>
+
+  <!-- Text to Voice Section -->
+  <section id="tts" aria-labelledby="tts-label" role="region">
+    <h2 id="tts-label">Text to Voice</h2>
+    <p>Enter text to convert it to speech using your browser's built-in text-to-speech engine.</p>
+    <textarea id="ttsInput" rows="6" placeholder="Type your text here..."></textarea>
+    <button id="ttsSpeak" class="primary">Speak</button>
+    <button id="ttsStop" class="primary" style="background:#e94e77;">Stop</button>
+    <div id="voiceSelectContainer" style="margin-top:1rem;">
+      <label for="voiceSelect" class="label-group">Select Voice</label>
+      <select id="voiceSelect"></select>
+    </div>
+  </section>
+
+  <!-- AI Q&A Section -->
+  <section id="qa" aria-labelledby="qa-label" role="region">
+    <h2 id="qa-label">AI Question & Answer</h2>
+    <p>Ask any question. (Note: Uses simulated answers offline.)</p>
+    <textarea id="qaInput" rows="6" placeholder="Ask me anything..."></textarea>
+    <button id="askBtn" class="primary">Ask AI</button>
+    <div id="answerOutput" class="output-text" aria-live="polite" aria-atomic="true" style="margin-top:1rem;"></div>
+  </section>
+</main>
+<footer>
+  &copy; 2024 AI Multifunction Hub - Created by AI
+</footer>
+
+<script>
+  // Tab Navigation
+  const tabButtons = document.querySelectorAll('nav button.tab-button');
+  const sections = document.querySelectorAll('main > section');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      sections.forEach(sec => sec.classList.remove('active'));
+      button.classList.add('active');
+      const tab = button.dataset.tab;
+      const activeSection = document.getElementById(tab);
+      activeSection.classList.add('active');
+    });
+  });
+
+  // ===== Music Beat Generator =====
+  const playBtn = document.getElementById('playBeat');
+  const stopBtn = document.getElementById('stopBeat');
+  const tempoInput = document.getElementById('tempo');
+  const tempoValue = document.getElementById('tempoValue');
+  let audioCtx, isPlaying = false, currentNote = 0, timerID;
+
+  tempoInput.addEventListener('input', e => {
+    tempoValue.textContent = tempoInput.value;
+    if (isPlaying) {
+      stopBeat();
+      playBeat();
+    }
+  });
+
+  function playBeat() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    isPlaying = true;
+    currentNote = 0;
+    scheduleNextNote();
+  }
+
+  function stopBeat() {
+    isPlaying = false;
+    clearTimeout(timerID);
+  }
+
+  function scheduleNextNote() {
+    if (!isPlaying) return;
+
+    const secondsPerBeat = 60 / tempoInput.value;
+    const time = audioCtx.currentTime + 0.05; // slight delay
+
+    // Kick drum (simple bass drum sound)
+    if (currentNote % 4 === 0) {
+      playKick(time);
+    }
+    // Snare drum on beat 2 and 4
+    if (currentNote % 4 === 2) {
+      playSnare(time);
+    }
+    // Closed hi-hat on every 8th note
+    if (currentNote % 2 === 0) {
+      playHiHat(time);
+    }
+
+    currentNote++;
+    if (currentNote >= 16) currentNote = 0;
+
+    timerID = setTimeout(scheduleNextNote, secondsPerBeat * 500); // half beat in ms
+  }
+
+  function playKick(time) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.setValueAtTime(150, time);
+    osc.frequency.exponentialRampToValueAtTime(0.001, time + 0.1);
+    gain.gain.setValueAtTime(1, time);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(time);
+    osc.stop(time + 0.1);
+  }
+
+  function playSnare(time) {
+    const noiseBuffer = createNoiseBuffer();
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    const noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type = 'highpass';
+    noiseFilter.frequency.setValueAtTime(1000, time);
+
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(1, time);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
+
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(audioCtx.destination);
+    noise.start(time);
+    noise.stop(time + 0.2);
+  }
+
+  function createNoiseBuffer() {
+    const bufferSize = audioCtx.sampleRate * 0.2;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    return buffer;
+  }
+
+  function playHiHat(time) {
+    const fundamental = 4000;
+    const ratios = [1, 1.5, 2, 3, 4.16, 5.43, 6.79, 8.21];
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.3, time);
+    gain.gain.exponentialRampToValueAtTime(0.01, time + 0.05);
+    
+    const bandpass = audioCtx.createBiquadFilter();
+    bandpass.type = 'bandpass';
+    bandpass.frequency.setValueAtTime(10000, time);
+    
+    gain.connect(audioCtx.destination);
+
+    ratios.forEach(ratio => {
+      const osc = audioCtx.createOscillator();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(fundamental * ratio, time);
+      osc.connect(bandpass);
+      bandpass.connect(gain);
+      osc.start(time);
+      osc.stop(time + 0.05);
+    });
+  }
+
+  playBtn.addEventListener('click', () => {
+    if (!isPlaying) {
+      playBeat();
+    }
+  });
+  stopBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      stopBeat();
+    }
+  });
+
+  // ===== Photo Editor =====
+  const photoUpload = document.getElementById('photoUpload');
+  const photoCanvas = document.getElementById('photoCanvas');
+  const ctx = photoCanvas.getContext('2d');
+  const photoControls = document.getElementById('photoControls');
+  const brightnessInput = document.getElementById('brightness');
+  const contrastInput = document.getElementById('contrast');
+  const grayscaleInput = document.getElementById('grayscale');
+  const resetPhotoBtn = document.getElementById('resetPhoto');
+  let originalImage = null;
+
+  photoUpload.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload a valid image file.');
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      // Resize canvas to image
+      let ratio = img.width / img.height;
+      if (ratio > 1.5) {
+        photoCanvas.width = 600;
+        photoCanvas.height = photoCanvas.width / ratio;
+      } else {
+        photoCanvas.height = 400;
+        photoCanvas.width = photoCanvas.height * ratio;
+      }
+      ctx.drawImage(img, 0, 0, photoCanvas.width, photoCanvas.height);
+      originalImage = ctx.getImageData(0, 0, photoCanvas.width, photoCanvas.height);
+      photoControls.style.display = 'block';
+      resetPhotoFilters();
+    };
+    img.onerror = () => {
+      alert('Failed to load image.');
+    };
+    img.src = URL.createObjectURL(file);
+  });
+
+  function applyFilters() {
+    if (!originalImage) return;
+    let imgData = ctx.createImageData(originalImage);
+    imgData.data.set(originalImage.data);
+
+    const brightness = Number(brightnessInput.value);
+    const contrast = Number(contrastInput.value);
+    const grayscale = Number(grayscaleInput.value);
+
+    for (let i = 0; i < imgData.data.length; i += 4) {
+      // Apply brightness
+      imgData.data[i] = clamp(imgData.data[i] + brightness);     // R
+      imgData.data[i+1] = clamp(imgData.data[i+1] + brightness); // G
+      imgData.data[i+2] = clamp(imgData.data[i+2] + brightness); // B
+
+      // Apply contrast
+      imgData.data[i] = applyContrast(imgData.data[i], contrast);
+      imgData.data[i+1] = applyContrast(imgData.data[i+1], contrast);
+      imgData.data[i+2] = applyContrast(imgData.data[i+2], contrast);
+
+      // Apply grayscale
+      if (grayscale > 0) {
+        let avg = (imgData.data[i] + imgData.data[i+1] + imgData.data[i+2]) / 3;
+        imgData.data[i] = lerp(imgData.data[i], avg, grayscale/100);
+        imgData.data[i+1] = lerp(imgData.data[i+1], avg, grayscale/100);
+        imgData.data[i+2] = lerp(imgData.data[i+2], avg, grayscale/100);
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  function clamp(value) {
+    return Math.min(255, Math.max(0, value));
+  }
+
+  function applyContrast(value, contrast) {
+    // contrast range -100 to 100
+    const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+    return clamp(factor * (value - 128) + 128);
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  brightnessInput.addEventListener('input', applyFilters);
+  contrastInput.addEventListener('input', applyFilters);
+  grayscaleInput.addEventListener('input', applyFilters);
+
+  resetPhotoBtn.addEventListener('click', resetPhotoFilters);
+
+  function resetPhotoFilters() {
+    brightnessInput.value = 0;
+    contrastInput.value = 0;
+    grayscaleInput.value = 0;
+    if (originalImage) {
+      ctx.putImageData(originalImage, 0, 0);
+    }
+  }
+
+  // ===== Video Editor =====
+  const videoUpload = document.getElementById('videoUpload');
+  const videoPlayer = document.getElementById('videoPlayer');
+  const videoControls = document.getElementById('videoControls');
+  const startTimeInput = document.getElementById('startTime');
+  const endTimeInput = document.getElementById('endTime');
+  const startTimeLabel = document.getElementById('startTimeLabel');
+  const endTimeLabel = document.getElementById('endTimeLabel');
+  const trimVideoBtn = document.getElementById('trimVideo');
+  let videoDuration = 0;
+
+  videoUpload.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('video/')) {
+      alert('Please upload a valid video file.');
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    videoPlayer.src = url;
+    videoPlayer.load();
+    videoPlayer.addEventListener('loadedmetadata', () => {
+      videoDuration = videoPlayer.duration;
+      startTimeInput.max = videoDuration.toFixed(2);
+      endTimeInput.max = videoDuration.toFixed(2);
+      startTimeInput.value = 0;
+      endTimeInput.value = videoDuration.toFixed(2);
+      startTimeLabel.textContent = '0';
+      endTimeLabel.textContent = videoDuration.toFixed(2);
+      videoControls.style.display = 'block';
+    }, { once: true });
+  });
+
+  startTimeInput.addEventListener('input', () => {
+    let val = Number(startTimeInput.value);
+    if (val >= Number(endTimeInput.value)) {
+      val = Number(endTimeInput.value) - 0.1;
+      startTimeInput.value = val.toFixed(2);
+    }
+    startTimeLabel.textContent = val.toFixed(2);
+  });
+  endTimeInput.addEventListener('input', () => {
+    let val = Number(endTimeInput.value);
+    if (val <= Number(startTimeInput.value)) {
+      val = Number(startTimeInput.value) + 0.1;
+      endTimeInput.value = val.toFixed(2);
+    }
+    if (val > videoDuration) val = videoDuration;
+    endTimeLabel.textContent = val.toFixed(2);
+  });
+
+  trimVideoBtn.addEventListener('click', () => {
+    alert('Video trimming is not supported fully in-browser due to browser limitations. You can play the trimmed segment by adjusting the video controls manually.');
+  });
+
+  // ===== Text to Voice =====
+  const ttsInput = document.getElementById('ttsInput');
+  const ttsSpeak = document.getElementById('ttsSpeak');
+  const ttsStop = document.getElementById('ttsStop');
+  const voiceSelect = document.getElementById('voiceSelect');
+  let synth = window.speechSynthesis;
+  let voices = [];
+  let utterance;
+
+  function populateVoices() {
+    voices = synth.getVoices();
+    voiceSelect.innerHTML = '';
+    voices.forEach((voice, i) => {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = voice.name + (voice.default ? ' (default)' : '') + ' [' + voice.lang + ']';
+      voiceSelect.appendChild(option);
+    });
+  }
+  populateVoices();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoices;
+  }
+
+  ttsSpeak.addEventListener('click', () => {
+    if (synth.speaking) {
+      alert('Already speaking...');
+      return;
+    }
+    if (ttsInput.value.trim() === '') {
+      alert('Please enter some text to speak.');
+      return;
+    }
+    utterance = new SpeechSynthesisUtterance(ttsInput.value);
+    const selectedVoiceIndex = voiceSelect.value;
+    if (voices[selectedVoiceIndex]) {
+      utterance.voice = voices[selectedVoiceIndex];
+    }
+    synth.speak(utterance);
+  });
+
+  ttsStop.addEventListener('click', () => {
+    if (synth.speaking) {
+      synth.cancel();
+    }
+  });
+
+  // ===== AI Q&A =====
+  const qaInput = document.getElementById('qaInput');
+  const askBtn = document.getElementById('askBtn');
+  const answerOutput = document.getElementById('answerOutput');
+
+  askBtn.addEventListener('click', async () => {
+    const question = qaInput.value.trim();
+    if (!question) {
+      alert('Please enter a question!');
+      return;
+    }
+    answerOutput.textContent = '';
+    askBtn.disabled = true;
+    askBtn.textContent = 'Thinking...';
+    // Simulated AI response (since no backend API provided)
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const simulatedAnswers = [
+      "That's interesting! I think it depends on many factors.",
+      "I'm sorry, but I don't have the information to answer that precisely.",
+      "Based on what I know, here is a possible response...",
+      "Let me think... The best approach would be to research more on this topic.",
+      "AI says: The answer lies in understanding the core principles."
+    ]
